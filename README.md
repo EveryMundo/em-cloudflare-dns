@@ -1,6 +1,6 @@
 # em-cloudflare-dns
 
-Easily provision KV namespaces and its values on Cloudflare [Serverless Components](https://github.com/serverless/components).
+Easily provision cloudflare DNS [Serverless Components](https://github.com/serverless/components).
 
 &nbsp;
 
