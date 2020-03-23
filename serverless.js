@@ -2,25 +2,19 @@ const { Component } = require("@serverless/core");
 const cloudflare = require("cloudflare");
 
 class CloudflareDNS extends Component {
-  async default({
-    email = process.env.CF_EMAIL,
-    key = process.env.CF_KEY,
-    zoneId = process.env.CF_ZONE_ID,
-    zone,
-    name,
-    type,
-    content,
-    proxied = true
-   
-  } = {}) {
+  async default(inputs = {}) {
+    const EMAIL = process.env.CF_EMAIL;
+    const API_KEY = process.env.CF_KEY;
+    const ZONE_ID = process.env.CF_ZONE_ID;
+    const { zone, name, type, content, proxied = true} = inputs;
     this.context.debug(`Starting CloudflareDNS Component.`);
     this.context.debug(`Finding DNS zone`);
-    const cf = cloudflare({ email, key });
-    this.state.zoneId = zoneId;
+    const cf = cloudflare({ email:EMAIL, key:API_KEY });
+    this.state.zoneId = ZONE_ID;
     if (!this.state.zoneId) {
       const zones = await cf.zones.browse();
-      const zone = zones.result.find(zone => zone.name === zone);
-      zone && (this.state.zoneId = zone.id);
+      const { id } = zones.result.find(  zoneObj => zoneObj.name === zone);
+      id && (this.state.zoneId = id);
     }
 
     if (!this.state.zoneId) {
@@ -64,21 +58,19 @@ class CloudflareDNS extends Component {
     return { name: name };
   }
 
-  async remove({
-    email = process.env.CF_EMAIL,
-    key = process.env.CF_KEY,
-    zoneId = process.env.CF_ZONE_ID,
-    zone,
-    name
-  } = {}) {
+  async remove(inputs = {}) {
+    const EMAIL = process.env.CF_EMAIL;
+    const API_KEY = process.env.CF_KEY;
+    const { zone,  name} = inputs;
     this.context.debug(`Removing DNS Record: ${name}`);
-    const cf = cloudflare({ email, key });
-    this.state.zoneId = zoneId;
+    const cf = cloudflare({ email:EMAIL, key:API_KEY });
+    
     if (!this.state.zoneId) {
-      const zones = await cf.zones.browse();
-      const zone = zones.result.find(zone => zone.name === zone);
-      this.state.zoneId = zone.id;
+      const zones = await cf.zones.browse();     
+      const { id } = zones.result.find(  zoneObj => zoneObj.name === zone);
+      id && (this.state.zoneId = id);
     }
+
     if (!this.state.zoneId) {
       throw new Error(`No zone named "${zone}" found`);
     }
