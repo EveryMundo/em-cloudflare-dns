@@ -3,10 +3,11 @@ stage: dev
 plugins:
    - serverless-dotenv-plugin
 demo:
-  component: '@everymundo/em-cloudflare-dns@0.0.0'
+  #component: '@everymundo/em-cloudflare-dns@0.0.1'
+  component: '../'
   inputs:
       zone: everymundo.net
-      name: erlin.vg
+      name: aa-dev-latest
       type: CNAME
       content: everymundo.net
     
