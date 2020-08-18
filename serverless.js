@@ -19,8 +19,8 @@ class CloudflareDNS extends Component {
     }
 
     const recordName = `${name}.${content}`;
-    const records = await cf.dnsRecords.browse(this.state.zoneId, { per_page: 100 });
-    const record = records.result.find( record => record.name ===  recordName);    
+    const records = await cf.dnsRecords.browse(this.state.zoneId, { name: recordName });   
+    const record = records.result.find( record => record.name ===  recordName);        
     this.state.recordId = record && record.id;
 
     if (!this.state.recordId) {
