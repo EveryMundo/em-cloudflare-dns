@@ -1,6 +1,6 @@
 {
   "name": "@everymundo/em-cloudflare-dns",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "",
   "main": "serverless.js",
   "publishConfig": {
